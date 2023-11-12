@@ -8,23 +8,12 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
-
-const allowedOrigins = ['http://localhost:4200', 'https://tudominio.com'];
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-}));
+app.use(cors({ origin: true, credentials: true }));
 
 const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
 app.get('/', (req, res, next) => {
-  res.status(200).json({message: '🗿 Yes...'})
+  return res.status(200).json({message: '🗿 Yes...'})
 })
 
 
@@ -104,7 +93,6 @@ app.post("/checkout", async (req, res, next) => {
     res.status(200).json(session);
   } catch (error) {
     next(error);
-    res.status(400).json({ 'message': 'Algo salio mal...' });
   }
 });
 
