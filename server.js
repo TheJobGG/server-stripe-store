@@ -14,6 +14,8 @@ const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
 app.post("/checkout", async (req, res, next) => {
   try {
+    const success_url = `${process.env.FRONTEND_BASE_URL}/thanks`;
+    const cancel_url = `${process.env.FRONTEND_BASE_URL}/cart`;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -79,8 +81,8 @@ app.post("/checkout", async (req, res, next) => {
         quantity: item.quantity,
       })),
       mode: "payment",
-      success_url: `${process.env.FRONTEND_BASE_URL}/thanks`,
-      cancel_url: "http://localhost:4200/cart",
+      success_url,
+      cancel_url,
     });
 
     res.status(200).json(session);
