@@ -99,6 +99,7 @@ app.post("/checkout", async (req, res, next) => {
     res.status(200).json(session);
   } catch (error) {
     next(error);
+    res.status(400).json({'message': 'Algo salio mal...'});
   }
 });
 
