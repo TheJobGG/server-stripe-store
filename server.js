@@ -19,6 +19,12 @@ app.get('/', (req, res, next) => {
 
 app.post("/checkout", async (req, res, next) => {
   try {
+
+    if(!req.body.items){
+      res.status(400).json('The products was not provided.');
+    }
+
+
     const success_url = `${process.env.FRONTEND_BASE_URL}/thanks`;
     const cancel_url = `${process.env.FRONTEND_BASE_URL}/cart`;
 
