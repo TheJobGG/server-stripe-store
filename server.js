@@ -8,7 +8,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 
 const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
