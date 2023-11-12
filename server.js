@@ -8,7 +8,18 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
-app.use(cors({ origin: true, credentials: true }));
+
+const allowedOrigins = ['http://localhost:4200', 'https://tudominio.com'];
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 
 const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
