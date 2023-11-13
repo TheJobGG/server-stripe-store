@@ -13,8 +13,8 @@ app.use(cors());
 const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
 app.get('/', (req, res, next) => {
-  
-  return res.status(200).json({ message: '🗿 Yes...', a: process.env.NODE_ENV })
+
+  return res.status(200).json({ message: '🗿 Yes...' })
 })
 
 
@@ -36,7 +36,7 @@ app.post("/checkout", async (req, res, next) => {
     }
 
     const success_url = `${baseUrl}/thanks`;
-    const cancel_url = `${baseUrl}/cart`;
+    const cancel_url = `${baseUrl}`;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
