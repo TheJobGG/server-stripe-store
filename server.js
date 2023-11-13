@@ -13,20 +13,30 @@ app.use(cors());
 const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
 app.get('/', (req, res, next) => {
-  return res.status(200).json({message: '🗿 Yes...'})
+  
+  return res.status(200).json({ message: '🗿 Yes...', a: process.env.NODE_ENV })
 })
 
 
 app.post("/checkout", async (req, res, next) => {
   try {
 
-    if(!req.body.items){
+    if (!req.body.items) {
       res.status(400).json('The products was not provided.');
     }
 
+    let baseUrl;
 
-    const success_url = `${process.env.FRONTEND_BASE_URL}/thanks`;
-    const cancel_url = `${process.env.FRONTEND_BASE_URL}/cart`;
+    if (process.env.NODE_ENV === 'dev') {
+      // Development environment
+      baseUrl = process.env.DEV_FRONTEND_BASE_URL || 'http://localhost:4200';
+    } else {
+      // Production environment
+      baseUrl = process.env.PROD_FRONTEND_BASE_URL || 'https://ng-store.netlify.app';
+    }
+
+    const success_url = `${baseUrl}/thanks`;
+    const cancel_url = `${baseUrl}/cart`;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
